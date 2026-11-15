@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { DepartmentModule } from './module/department/department.module';
+import { AuthModule } from './module/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { jwtGuard } from './module/auth/guards/jwt-auth.guard';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -16,10 +19,16 @@ import { DepartmentModule } from './module/department/department.module';
         password: configService.getOrThrow('DB_PASSWORD'),
         database: configService.getOrThrow('DB_NAME'),
         autoLoadEntities: true,
-        synchronize: configService.getOrThrow('DB_STATUS') === "development"?true:false,
+        synchronize: configService.getOrThrow('DB_STATUS') === "development" ? true : false,
       }),
-    }),
-    DepartmentModule
-  ]
+    },),
+    DepartmentModule,
+    AuthModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: jwtGuard
+    }]
 })
 export class AppModule { }

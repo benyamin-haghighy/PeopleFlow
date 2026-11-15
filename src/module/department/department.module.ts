@@ -4,8 +4,9 @@ import {Departments} from "./entities/department.entity"
 import { ManagerDepartmentController } from './controllers/department-manager.controller';
 import { DepartmentManageService } from './service/department-manager.service';
 import { EmployeeDepartmentController } from './controllers/department-employe.controller';
+import { AuthModule } from '../auth/auth.module';
 @Module({
-    imports:[TypeOrmModule.forFeature([Departments])],
+    imports:[TypeOrmModule.forFeature([Departments]),AuthModule],
     controllers:[ManagerDepartmentController, EmployeeDepartmentController],
     providers:[DepartmentManageService]
 })
