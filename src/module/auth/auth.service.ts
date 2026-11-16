@@ -8,6 +8,7 @@ import { RegisterDto } from './dto/register.dto';
 import bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { LoginAuthDto } from './dto/login.dto';
+import { OnEvent } from "@nestjs/event-emitter";
 @Injectable()
 export class AuthService {
   constructor(
@@ -16,7 +17,7 @@ export class AuthService {
     @InjectRepository(RefreshToken)
     private readonly refreshTokenRepository: Repository<RefreshToken>,
     private readonly jwt: JwtService,
-    private readonly configServcie: ConfigService
+    private readonly configServcie: ConfigService,
 
   ) { }
   async register(register: RegisterDto) {
@@ -99,5 +100,9 @@ export class AuthService {
       throw new NotFoundException('کاربری با این ایدی تلفن یافت نشد')
     }
     return user
+  }
+  @OnEvent('users.find')
+  async findAllUsers(){
+    return this.userRepository.find()
   }
 }

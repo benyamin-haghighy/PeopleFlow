@@ -1,20 +1,33 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import cookieParser from "cookie-parser"
-import path from 'path';
 import { ResponseInterceptor } from './common/interceptors/response.interceptors';
-import { jwtGuard } from './module/auth/guards/jwt-auth.guard';
+import path from 'node:path';
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService)
   const port = configService.get('PORT', 3001)
+  // set view engin
+  app.setBaseViewsDir(path.join(__dirname, 'views'))
+  app.setViewEngine('ejs')
   // set defaul perfix
   app.setGlobalPrefix('api/v1')
   // user global pipe
+
   app.useGlobalPipes(new ValidationPipe())
+  // set cors
+  app.enableCors({
+    origin: ['localhost:3000'],
+    methods: ["POST",'GET', 'DELETE', 'PUT', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+
+  })
   // use lobal interceptors
   app.useGlobalInterceptors(new ResponseInterceptor())
   // cookieParser

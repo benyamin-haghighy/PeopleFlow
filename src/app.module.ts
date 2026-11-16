@@ -5,6 +5,8 @@ import { DepartmentModule } from './module/department/department.module';
 import { AuthModule } from './module/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { jwtGuard } from './module/auth/guards/jwt-auth.guard';
+import { AttendanceModule } from './module/attendance/attendance.module';
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -24,6 +26,8 @@ import { jwtGuard } from './module/auth/guards/jwt-auth.guard';
     },),
     DepartmentModule,
     AuthModule,
+    AttendanceModule,
+    ScheduleModule.forRoot()
   ],
   providers: [
     {
