@@ -7,6 +7,7 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import cookieParser from "cookie-parser"
 import { ResponseInterceptor } from './common/interceptors/response.interceptors';
 import path from 'node:path';
+import { FilterError } from './common/filter/error.filter';
 async function bootstrap() {
   
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -30,6 +31,8 @@ async function bootstrap() {
   })
   // use lobal interceptors
   app.useGlobalInterceptors(new ResponseInterceptor())
+  // set filter error
+  app.useGlobalFilters(new FilterError)
   // cookieParser
   app.use(cookieParser(configService.getOrThrow("COOKIE_SECRET")));
   // Swagger Manager
