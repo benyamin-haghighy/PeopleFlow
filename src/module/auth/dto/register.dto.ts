@@ -1,6 +1,6 @@
 
 import { Transform } from 'class-transformer';
-import { IsMobilePhone, IsNotEmpty, IsString, MaxLength, MinLength, minLength } from 'class-validator';
+import { IsMobilePhone, IsNotEmpty, IsNumber, IsString, MaxLength, MinLength, minLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDto {
@@ -35,7 +35,16 @@ export class RegisterDto {
   })
   @IsString()
   @IsNotEmpty()
-  @MinLength(8,{message:"پسودر باید حداقل هشت کاراکتر باشد"})
-  @MaxLength(16,{message:"پسودر باید حداکثر ۱۶ کاراکتر باشد"})
+  @MinLength(8, { message: "پسودر باید حداقل هشت کاراکتر باشد" })
+  @MaxLength(16, { message: "پسودر باید حداکثر ۱۶ کاراکتر باشد" })
   password: string;
+  @ApiProperty({
+    description: 'شناسه گروه حقوقی کاربر',
+    example: 1,
+    required: true,
+    type: Number,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  groupId: number;
 }

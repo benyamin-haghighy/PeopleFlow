@@ -9,11 +9,15 @@ import bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { LoginAuthDto } from './dto/login.dto';
 import { OnEvent } from "@nestjs/event-emitter";
+import { Group } from '../payroll/entities/group.entity';
+import { Role } from '../../shared/enums/user-role.enum';
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(USER)
     private readonly userRepository: Repository<USER>,
+    @InjectRepository(Group)
+    private readonly groupRepository: Repository<Group>,
     @InjectRepository(RefreshToken)
     private readonly refreshTokenRepository: Repository<RefreshToken>,
     private readonly jwt: JwtService,
@@ -25,18 +29,55 @@ export class AuthService {
     if (user) {
       throw new BadRequestException('کاربری با این شماره تلفن وجود دارد')
     }
+    const isGroup = await this.groupRepository.findOne({ where: { id: register.groupId } })
+    if (!isGroup) {
+      throw new NotFoundException('گروهی با این ایدی وجود ندارد')
+    }
     const password = await bcrypt.hash(register.password, 10)
     Object.assign(register, { password })
     user = this.userRepository.create(register)
-    const  {password:ps, ...newUser} = await this.userRepository.save(user)
+    const { password: ps, ...newUser } = await this.userRepository.save(user)
     return newUser
+  }
+  async createManager(dto: RegisterDto) {
+    const existingUser = await this.userRepository.findOne({
+      where: { phone: dto.phone },
+    });
+
+    if (existingUser) {
+      throw new BadRequestException('کاربری با این شماره تلفن وجود دارد');
+    }
+
+    const group = await this.groupRepository.findOne({
+      where: { id: dto.groupId },
+    });
+
+    if (!group) {
+      throw new NotFoundException('گروهی با این شناسه وجود ندارد');
+    }
+
+    const password = await bcrypt.hash(dto.password, 10);
+
+    const manager = this.userRepository.create({
+      name: dto.name,
+      phone: dto.phone,
+      password,
+      groupId: dto.groupId,
+      role: Role.MANAGER,
+    });
+
+    const savedManager = await this.userRepository.save(manager);
+
+    const { password: _, ...result } = savedManager;
+
+    return result;
   }
   async validateUser(login: LoginAuthDto) {
     let user = await this.userRepository.findOne({ where: { phone: login.phone } })
     if (!user) {
       throw new NotFoundException('کاربری با این شماره تلفن یافت نشد')
     }
-    
+
     const isPassword = await bcrypt.compare(login.password, user.password)
     if (!isPassword) {
       throw new BadRequestException('پسورد اشتباه می باشد')
@@ -90,19 +131,19 @@ export class AuthService {
       throw new UnauthorizedException('رفرش توکن منقضی یا نامعتبر است، دوباره لاگین کنید')
     }
   }
-  async logOut(id:number){
-    await this.refreshTokenRepository.delete({user_id:id})
+  async logOut(id: number) {
+    await this.refreshTokenRepository.delete({ user_id: id })
     return 'با موفقیت خارج شدید'
   }
-  async findUserById(id:number){
-    let user = await this.userRepository.findOne({ where: { id} })
+  async findUserById(id: number) {
+    let user = await this.userRepository.findOne({ where: { id } })
     if (!user) {
       throw new NotFoundException('کاربری با این ایدی تلفن یافت نشد')
     }
     return user
   }
   @OnEvent('users.find')
-  async findAllUsers(){
+  async findAllUsers() {
     return this.userRepository.find()
   }
 }

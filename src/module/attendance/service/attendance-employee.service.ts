@@ -1,12 +1,12 @@
 import { BadRequestException, ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
-import { attendanceDto } from './dto/attendance.dto';
+import { attendanceDto } from '../dto/attendance.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Attendance } from './entities/attendance.entity';
+import { Attendance } from '../entities/attendance.entity';
 import { And, IsNull, LessThanOrEqual, MoreThanOrEqual, Not, Repository } from 'typeorm';
-import { AttendanceFilterDto } from './dto/attendance-filter.dto';
+import { AttendanceFilterDto } from '../dto/attendance-filter.dto';
 import { Cron } from '@nestjs/schedule';
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { AttendanceStatus } from './enum/AttendanceStatus.enum';
+import { AttendanceStatus } from '../enum/AttendanceStatus.enum';
 @Injectable()
 export class AttendanceService {
   constructor(
@@ -39,6 +39,8 @@ export class AttendanceService {
     }
   }
   async checkInTime(dto: attendanceDto, userId: number) {
+    console.log(userId);
+    
     const { workDate, hour } = this.getCompanyTime()
     if (hour < 7 || hour > 12) {
       throw new ForbiddenException('زمان مجاز ثبت ورود از ساعت ۷ تا ۱۱ صبح است');
@@ -96,7 +98,6 @@ export class AttendanceService {
       return this.attendanceRepository.find({
         where: {
           userId,
-          checkOutTime: Not(IsNull())
         }
       });
     }

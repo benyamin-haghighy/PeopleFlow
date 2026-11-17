@@ -7,6 +7,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { jwtGuard } from './module/auth/guards/jwt-auth.guard';
 import { AttendanceModule } from './module/attendance/attendance.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { RedisModule } from './module/redis/redis.module';
+import { PayRolleModule } from './module/payroll/payroll.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -27,7 +30,10 @@ import { ScheduleModule } from '@nestjs/schedule';
     DepartmentModule,
     AuthModule,
     AttendanceModule,
-    ScheduleModule.forRoot()
+    EventEmitterModule.forRoot(),
+    ScheduleModule.forRoot(),
+    RedisModule,
+    PayRolleModule
   ],
   providers: [
     {

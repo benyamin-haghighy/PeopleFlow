@@ -9,6 +9,7 @@ import { USER } from './entities/user.entity';
 import { jwtStrategy } from './strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { RoleGuard } from './guards/role.guard';
+import { Group } from '../payroll/entities/group.entity';
 @Module({
   imports: [PassportModule, JwtModule.registerAsync({
     inject: [ConfigService],
@@ -17,10 +18,10 @@ import { RoleGuard } from './guards/role.guard';
       signOptions: { expiresIn: configService.getOrThrow('ACCESS_TOKEN_EXPIREIN') }
     })
   }),
-    TypeOrmModule.forFeature([RefreshToken, USER])
+    TypeOrmModule.forFeature([RefreshToken, USER,Group])
   ],
   controllers: [AuthController],
   providers: [AuthService, jwtStrategy,RoleGuard],
-  exports:[RoleGuard]
+  exports:[RoleGuard, AuthService]
 })
 export class AuthModule { }

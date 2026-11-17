@@ -3,6 +3,6 @@ import { Role } from "../../../shared/enums/user-role.enum"
 
 
 export class userDto{
-    sub: number
+    id: number
     role: Role
 }
