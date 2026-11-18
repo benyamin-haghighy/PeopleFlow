@@ -81,7 +81,7 @@
   }
 
   async function managerDashboard() {
-    const results = await Promise.allSettled([HRApi.get('/manager/departments'), HRApi.get('/manager/payrolle/groups'), HRApi.get('/manager/payrolle')]);
+    const results = await Promise.allSettled([HRApi.get('/manager-data/departments'), HRApi.get('/manager/payrolle/groups'), HRApi.get('/manager/payrolle')]);
     const [departments, groups, payrolls] = results.map(r => r.status === 'fulfilled' ? r.value : []);
     const depts = Array.isArray(departments) ? departments : [];
     const grps = Array.isArray(groups) ? groups : [];
@@ -93,7 +93,7 @@
   }
 
   async function managerDepartments() {
-    const data = await HRApi.get('/manager/departments');
+    const data = await HRApi.get('/manager-data/departments');
     const list = Array.isArray(data) ? data : [];
     const rows = list.map(d=>`<tr><td>${fa(d.id)}</td><td><b>${esc(d.name)}</b></td><td>${esc(d.description || '—')}</td><td>${dateFa(d.created_at)}</td><td><div class="action-row"><button class="icon-btn" data-action="department-detail" data-id="${d.id}">جزئیات</button><button class="icon-btn" data-action="department-edit" data-id="${d.id}">ویرایش</button><button class="icon-btn danger" data-action="department-delete" data-id="${d.id}">حذف</button></div></td></tr>`).join('');
     root.innerHTML = pageHeading('مدیریت دپارتمان‌ها','ایجاد، مشاهده، ویرایش و حذف دپارتمان‌های سازمان', '<button class="btn btn-primary" data-action="department-create">＋ دپارتمان جدید</button>') + `<section class="panel"><div class="toolbar"><label class="field" style="min-width:230px">جست‌وجو<input id="department-search" placeholder="نام یا توضیحات دپارتمان"></label><span class="muted" style="font-size:11px">${fa(list.length)} دپارتمان ثبت‌شده</span></div><div id="department-table">${table(['شناسه','نام','توضیحات','تاریخ ایجاد','عملیات'], rows)}</div></section>`;
@@ -106,11 +106,11 @@
   function departmentForm(item = {}) {
     const editing = Boolean(item.id);
     openModal(editing ? 'ویرایش دپارتمان' : 'ایجاد دپارتمان', `<form id="department-form"><div class="form-grid">${formField('نام دپارتمان','name',item.name || '','text','required minlength="2" maxlength="100"')}<label class="field full">توضیحات<textarea name="description" placeholder="توضیحات تکمیلی">${esc(item.description || '')}</textarea></label></div><div class="modal-actions"><button class="btn btn-primary" type="submit">${editing?'ذخیره تغییرات':'ایجاد دپارتمان'}</button><button class="btn btn-secondary" type="button" data-close-modal>انصراف</button></div></form>`, host => {
-      $('#department-form',host).addEventListener('submit', async e=>{e.preventDefault();const f=new FormData(e.currentTarget);const payload={name:String(f.get('name')).trim(),description:String(f.get('description')||'').trim()};try{if(editing)await HRApi.patch(`/manager/departments/${item.id}`,payload);else await HRApi.post('/manager/departments',payload);host.innerHTML='';showToast(editing?'دپارتمان ویرایش شد':'دپارتمان ایجاد شد');await managerDepartments();}catch(err){showToast(err.message,'error');}});
+      $('#department-form',host).addEventListener('submit', async e=>{e.preventDefault();const f=new FormData(e.currentTarget);const payload={name:String(f.get('name')).trim(),description:String(f.get('description')||'').trim()};try{if(editing)await HRApi.patch(`/manager-data/departments/${item.id}`,payload);else await HRApi.post('/manager-data/departments',payload);host.innerHTML='';showToast(editing?'دپارتمان ویرایش شد':'دپارتمان ایجاد شد');await managerDepartments();}catch(err){showToast(err.message,'error');}});
     });
   }
   async function departmentDetail(id) {
-    try { const d=await HRApi.get(`/manager/departments/${id}`); openModal('جزئیات دپارتمان',`<div class="detail-grid"><div class="detail-item"><small>شناسه</small><b>${fa(d.id)}</b></div><div class="detail-item"><small>نام</small><b>${esc(d.name)}</b></div><div class="detail-item"><small>تاریخ ایجاد</small><b>${dateFa(d.created_at)}</b></div><div class="detail-item" style="grid-column:1/-1"><small>توضیحات</small><b>${esc(d.description||'—')}</b></div></div>`); } catch(e){showError(e);}
+    try { const d=await HRApi.get(`/manager-data/departments/${id}`); openModal('جزئیات دپارتمان',`<div class="detail-grid"><div class="detail-item"><small>شناسه</small><b>${fa(d.id)}</b></div><div class="detail-item"><small>نام</small><b>${esc(d.name)}</b></div><div class="detail-item"><small>تاریخ ایجاد</small><b>${dateFa(d.created_at)}</b></div><div class="detail-item" style="grid-column:1/-1"><small>توضیحات</small><b>${esc(d.description||'—')}</b></div></div>`); } catch(e){showError(e);}
   }
 
   async function managerGroups() {
@@ -185,9 +185,9 @@
     const button=event.target.closest('[data-action]');if(!button)return;
     const id=button.dataset.id;const action=button.dataset.action;
     if(action==='department-create')departmentForm();
-    if(action==='department-edit'){try{const d=await HRApi.get(`/manager/departments/${id}`);departmentForm(d);}catch(e){showError(e);}}
+    if(action==='department-edit'){try{const d=await HRApi.get(`/manager-data/departments/${id}`);departmentForm(d);}catch(e){showError(e);}}
     if(action==='department-detail')departmentDetail(id);
-    if(action==='department-delete'){if(!confirm('از حذف این دپارتمان مطمئن هستید؟'))return;try{await HRApi.delete(`/manager/departments/${id}`);showToast('دپارتمان حذف شد');await managerDepartments();}catch(e){showError(e);}}
+    if(action==='department-delete'){if(!confirm('از حذف این دپارتمان مطمئن هستید؟'))return;try{await HRApi.delete(`/manager-data/departments/${id}`);showToast('دپارتمان حذف شد');await managerDepartments();}catch(e){showError(e);}}
     if(action==='group-edit')editGroup(id);
     if(action==='payroll-detail')payrollDetail(id,button.dataset.owner);
     if(action==='employee-department-detail')employeeDepartmentDetail(id);
