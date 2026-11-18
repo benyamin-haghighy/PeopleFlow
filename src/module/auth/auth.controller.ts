@@ -9,11 +9,11 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagg
 import { RoleDt } from './decorators/role.decorator';
 import { Role } from '../../shared/enums/user-role.enum';
 import { RoleGuard } from './guards/role.guard';
-@Public()
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
-
+  @Public()
   @Post('register')
   register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
@@ -28,6 +28,7 @@ export class AuthController {
   createManager(@Body() dto: RegisterDto) {
     return this.authService.createManager(dto);
   }
+  @Public()
   @Post('login')
   async login(@Body() dto: LoginAuthDto, @Res() res: Response) {
     const { refreshToken, accessToken, user } = await this.authService.login(dto);
@@ -43,6 +44,7 @@ export class AuthController {
       accessToken
     })
   }
+  @Public()
   @Post("refresh/user/:id")
   async refreshToken(@Req() req: Request, @Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const refreshToken = req.signedCookies['refreshToken']

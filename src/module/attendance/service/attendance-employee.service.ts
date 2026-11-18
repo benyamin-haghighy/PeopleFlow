@@ -40,6 +40,7 @@ export class AttendanceService {
   }
   async checkInTime(dto: attendanceDto, userId: number) {
     console.log(userId);
+    console.log('dto -------->', dto);
     
     const { workDate, hour } = this.getCompanyTime()
     if (hour < 7 || hour > 12) {
@@ -48,7 +49,7 @@ export class AttendanceService {
 
     try {
       return await this.attendanceRepository.save(
-        this.attendanceRepository.create({ userId, workDate, checkInTime: new Date(), note: dto.note })
+        this.attendanceRepository.create({ userId, workDate, checkInTime: new Date(), note: dto?.note ?? null })
       )
     } catch (error: any) {
       if (error.driverError?.code === '23505') {

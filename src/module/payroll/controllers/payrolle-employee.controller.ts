@@ -35,7 +35,7 @@ export class EmployeeController {
         private readonly employeeService: EmployeeService,
     ) {}
 
-    @Get('payroll/:id')
+    @Get('/:id')
     @ApiOperation({ summary: 'دریافت فیش حقوقی کارمند بر اساس شناسه' })
     @ApiParam({
         name: 'id',
@@ -73,7 +73,7 @@ export class EmployeeController {
         );
     }
 
-    @Get('payroll')
+    @Get()
     @ApiOperation({ summary: 'دریافت فیش‌های حقوقی کارمند با امکان فیلتر تاریخ' })
     @ApiQuery({
         name: 'startDate',

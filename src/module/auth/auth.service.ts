@@ -68,7 +68,7 @@ export class AuthService {
 
     const savedManager = await this.userRepository.save(manager);
 
-    const { password: _, ...result } = savedManager;
+    const { password:newPassword, ...result } = savedManager;
 
     return result;
   }
@@ -96,9 +96,10 @@ export class AuthService {
     } else {
       rt = this.refreshTokenRepository.create({ token: hashRefreshToken, user })
     }
+    const {password, ...newUser} = user
     await this.refreshTokenRepository.save(rt)
     return {
-      user,
+      user:newUser,
       accessToken,
       refreshToken
     }

@@ -26,7 +26,7 @@ export class Attendance {
         default: AttendanceStatus.PRESENT
     })
     status: AttendanceStatus;
-    @ManyToOne(() => USER, (user) => user.attendaces)
+    @ManyToOne(() => USER, (user) => user.attendaces,{onDelete:"CASCADE"})
     @JoinColumn({ name: 'userId' })
     user: USER
 }
