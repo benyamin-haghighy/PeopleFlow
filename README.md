@@ -1,132 +1,271 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# HR Workspace — Human Resource Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A full-stack Human Resource Management System built with **NestJS, TypeScript, PostgreSQL, and Redis**, featuring role-based access control and dedicated workspaces for managers and employees.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+HR Workspace provides a centralized platform for managing organizational departments, employee groups, salary structures, payroll operations, and attendance records through a web-based interface.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Screenshots
 
-## Project setup
+### Manager Workspace
 
-```bash
-$ npm install
+| Dashboard | Departments | Groups & Salary Grades |
+|:---:|:---:|:---:|
+| ![Manager Dashboard](./screenshots/manager-dashboard.png) | ![Manager Departments](./screenshots/manager-departments.png) | ![Manager Groups](./screenshots/manager-groups.png) |
+
+| Payroll Management | Create Manager Account |
+|:---:|:---:|
+| ![Manager Payroll](./screenshots/manager-payroll.png) | ![Create Manager Account](./screenshots/manager-create-account.png) |
+
+### Employee Workspace
+
+| Dashboard | Attendance |
+|:---:|:---:|
+| ![Employee Dashboard](./screenshots/employee-dashboard.png) | ![Employee Attendance](./screenshots/employee-attendance.png) |
+
+| Payroll | Account |
+|:---:|:---:|
+| ![Employee Payroll](./screenshots/employee-payroll.png) | ![Employee Account](./screenshots/employee-account.png) |
+
+---
+
+## Key Features
+
+### Authentication & Authorization
+- User registration and authentication.
+- JWT-based authentication.
+- Access and refresh token management.
+- Secure refresh token storage using signed HTTP-only cookies.
+- Role-based access control for managers and employees.
+- Protected endpoints using authentication and role guards.
+- Dedicated authorization rules for different user roles.
+
+### Manager Workspace
+- Manager dashboard.
+- Department management with CRUD operations.
+- Employee group and salary grade management.
+- Payroll management and filtering.
+- Manager account creation.
+- Access-controlled management operations.
+
+### Employee Workspace
+- Employee dashboard.
+- Attendance check-in and check-out.
+- Attendance records and filtering.
+- Personal payroll information.
+- Department information.
+- Employee account management.
+
+### Backend Architecture
+- Modular architecture using NestJS modules.
+- Separation of controllers and business logic through services.
+- DTO-based request validation.
+- Centralized response handling through a custom interceptor.
+- Centralized exception handling through a custom exception filter.
+- Global API version prefix.
+- API documentation with Swagger.
+
+### Testing
+- HTTP-level end-to-end testing with Jest and Supertest.
+- Controller and endpoint testing.
+- Request validation testing.
+- Role-based authorization testing.
+- Response and exception handling testing.
+
+---
+
+## Technology Stack
+
+| Category | Technologies |
+|---|---|
+| Backend Framework | NestJS |
+| Programming Language | TypeScript |
+| Web Platform | Express.js |
+| Template Engine | EJS |
+| Database | PostgreSQL |
+| ORM | TypeORM |
+| In-memory Data Store | Redis |
+| Authentication | JWT |
+| Password Hashing | bcrypt |
+| Validation | class-validator, class-transformer |
+| API Documentation | Swagger |
+| Testing | Jest, Supertest |
+| Package Manager | npm |
+
+---
+
+## Architecture Overview
+
+The application follows a modular backend architecture based on NestJS.
+
+```text
+Client / Browser
+       |
+       v
+  Express.js + EJS
+       |
+       v
+   NestJS Application
+       |
+       +----------------------+
+       |                      |
+       v                      v
+ Authentication          API Controllers
+       |                      |
+       v                      v
+ JWT / Role Guards       DTO Validation
+                              |
+                              v
+                         Services
+                              |
+                    +---------+---------+
+                    |                   |
+                    v                   v
+                TypeORM              Redis
+                    |
+                    v
+                PostgreSQL
 ```
 
-## Compile and run the project
+### Main Modules
 
-```bash
-# development
-$ npm run start
+- **Auth Module:** Authentication, registration, token management, and authorization.
+- **Department Module:** Department management and employee department access.
+- **Attendance Module:** Employee attendance operations.
+- **Payroll Module:** Payroll management and employee payroll access.
+- **Web Module:** Server-rendered application pages using EJS.
 
-# watch mode
-$ npm run start:dev
+---
 
-# production mode
-$ npm run start:prod
+## API Overview
+
+The REST API uses the following global prefix:
+
+```http
+/api/v1
 ```
 
-## Run tests
+### Authentication
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/v1/auth/register` | Register a new employee |
+| POST | `/api/v1/auth/login` | Authenticate a user |
+| POST | `/api/v1/auth/create-manager` | Create a manager account |
+| POST | `/api/v1/auth/refresh/user/:id` | Refresh user authentication |
+
+### Department Management
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/v1/manager-data/departments` | Create a department |
+| GET | `/api/v1/manager-data/departments` | Retrieve all departments |
+| GET | `/api/v1/manager-data/departments/:id` | Retrieve a department |
+| PATCH | `/api/v1/manager-data/departments/:id` | Update a department |
+| DELETE | `/api/v1/manager-data/departments/:id` | Delete a department |
+
+### API Documentation
+
+Swagger documentation is available through separate manager and employee documentation interfaces:
+
+- Manager API: `/api/manager`
+- Employee API: `/api/employee`
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+Make sure the following tools are installed:
+
+- Node.js
+- npm
+- PostgreSQL
+- Redis
+
+### Installation
+
+Clone the repository:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+git clone <YOUR_REPOSITORY_URL>
+cd hr
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Install dependencies:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Environment Configuration
 
-## Observability
+Create a `.env` file in the project root and configure the required application settings.
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+The configuration should include your database connection, authentication secrets, cookie configuration, Redis connection, and application port.
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+Never commit your actual `.env` file or expose credentials in the repository.
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
+### Run the Application
 
-To add it to this project, run this and approve the code it prints at [observe.nestjs.com/link](https://observe.nestjs.com/link) - signing up for free if you have no account:
+Start the application in development mode:
 
 ```bash
-$ npx @nestjs/observe link
+npm run start:dev
 ```
 
-It installs `@nestjs/observe`, wires it into `AppModule` and `main.ts`, and writes the app key and secret into `.env`, which every `nest start` script (`start`, `start:dev`, `start:debug`) then loads. In production, set `OBSERVE_APP_KEY` and `OBSERVE_APP_SECRET` in the environment instead.
+The application will be available at the configured local address.
 
-Or do it by hand:
+---
 
-```bash
-$ npm install @nestjs/observe
+## Project Structure
+
+```text
+src/
+├── common/
+│   ├── filter/
+│   ├── interceptors/
+│   └── ...
+│
+├── module/
+│   ├── auth/
+│   ├── attendance/
+│   ├── department/
+│   └── payroll/
+│
+├── shared/
+│   └── enums/
+│
+├── views/
+│   ├── auth/
+│   ├── errors/
+│   └── ...
+│
+├── public/
+│   ├── css/
+│   └── js/
+│
+├── app.module.ts
+└── main.ts
+
+test/
+screenshots/
+README.md
 ```
 
-Then follow the [setup guide](https://docs.nestjs.com/observability/sdk) - it takes a single import and an app key.
+---
 
-The free plan needs no payment details and covers 300,000 events a month. You can also browse the [live demo](https://www.observe-demo.nestjs.com/dashboard) first - the whole dashboard over a busy service's data, with nothing to install.
+## Author
 
-## Resources
+**Benyamin Haghighy**
 
-Check out a few resources that may come in handy when working with NestJS:
+Backend Developer | Node.js · TypeScript · NestJS
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observe](https://observe.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- GitHub: [@benyamin-haghighy](https://github.com/benyamin-haghighy)
+- Email: bng2003@gmail.com
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+**HR Workspace** — A centralized platform for human resource management.
