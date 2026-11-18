@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b4e"><title><%= title %> | HR</title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body class="auth-page">
+  <main class="auth-shell">
+    <section class="auth-card">
+      <a class="brand brand-centered" href="/login"><span class="brand-mark">HR</span><span><b>سامانه منابع انسانی</b><small>مدیریت یکپارچه سرمایه انسانی</small></span></a>
+      <div class="auth-heading"><span class="eyebrow">خوش آمدید</span><h1>ورود به حساب کاربری</h1><p>برای ادامه، شماره موبایل و رمز عبور خود را وارد کنید.</p></div>
+      <div id="auth-message" class="notice hidden" role="alert"></div>
+      <form id="login-form" class="form-stack">
+        <label>شماره موبایل<input name="phone" type="tel" inputmode="tel" autocomplete="username" placeholder="09123456789" required maxlength="11"></label>
+        <label>رمز عبور<div class="password-wrap"><input name="password" type="password" autocomplete="current-password" placeholder="رمز عبور خود را وارد کنید" required><button class="password-toggle" type="button" aria-label="نمایش رمز عبور">نمایش</button></div></label>
+        <button class="btn btn-primary btn-block" type="submit"><span>ورود به سامانه</span><span class="btn-arrow">←</span></button>
+      </form>
+      <p class="auth-foot">حساب کاربری ندارید؟ <a href="/register">ثبت‌نام کارمند</a></p>
+      <p class="auth-hint">برای ایجاد حساب مدیر، از مدیر فعلی سامانه درخواست کنید.</p>
+    </section>
+    <aside class="auth-aside"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="aside-content"><span class="aside-kicker">HUMAN RESOURCE MANAGEMENT</span><h2>مدیریت هوشمند<br>سرمایه انسانی</h2><p>حضور و غیاب، دپارتمان‌ها و اطلاعات حقوقی در یک فضای یکپارچه.</p><div class="aside-feature"><span>✓</span> دسترسی متناسب با نقش سازمانی</div><div class="aside-feature"><span>✓</span> تجربه‌ای ساده و متمرکز</div></div><div class="aside-bottom">HR Workspace <span>•</span> Secure access</div></aside>
+  </main>
+  <script src="/js/api.js"></script><script src="/js/auth.js"></script>
+</body></html>

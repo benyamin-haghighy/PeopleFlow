@@ -20,13 +20,13 @@ describe('ManagerDepartmentController (e2e)', () => {
   afterAll(async () => app.close());
   beforeEach(() => jest.clearAllMocks());
 
-  it('POST /manager/departments - creates a department for manager', async () => {
+  it('POST /manager-data/departments - creates a department for manager', async () => {
     const dto = { name: 'Human Resources', description: 'HR department' };
     const result = { id: 1, ...dto };
     departmentService.create.mockResolvedValue(result);
 
     const response = await request(app.getHttpServer())
-      .post('/api/v1/manager/departments')
+      .post('/api/v1/manager-data/departments')
       .set('Authorization', 'Bearer manager-test-token')
       .send(dto)
       .expect(201);
@@ -35,41 +35,41 @@ describe('ManagerDepartmentController (e2e)', () => {
     expect(departmentService.create).toHaveBeenCalledWith(dto);
   });
 
-  it('POST /manager/departments - rejects an employee', async () => {
+  it('POST /manager-data/departments - rejects an employee', async () => {
     await request(app.getHttpServer())
-      .post('/api/v1/manager/departments')
+      .post('/api/v1/manager-data/departments')
       .set('Authorization', 'Bearer employee-test-token')
       .send({ name: 'Human Resources' })
       .expect(403);
   });
 
-  it('POST /manager/departments - validates department name', async () => {
+  it('POST /manager-data/departments - validates department name', async () => {
     await request(app.getHttpServer())
-      .post('/api/v1/manager/departments')
+      .post('/api/v1/manager-data/departments')
       .set('Authorization', 'Bearer manager-test-token')
       .send({ name: ' ' })
       .expect(400);
     expect(departmentService.create).not.toHaveBeenCalled();
   });
 
-  it('GET /manager/departments - returns all departments', async () => {
+  it('GET /manager-data/departments - returns all departments', async () => {
     const result = [{ id: 1, name: 'Human Resources' }];
     departmentService.findAll.mockResolvedValue(result);
 
     const response = await request(app.getHttpServer())
-      .get('/api/v1/manager/departments')
+      .get('/api/v1/manager-data/departments')
       .set('Authorization', 'Bearer manager-test-token')
       .expect(200);
 
     expect(response.body.data).toEqual(result);
   });
 
-  it('GET /manager/departments/:id - returns one department', async () => {
+  it('GET /manager-data/departments/:id - returns one department', async () => {
     const result = { id: 3, name: 'Finance' };
     departmentService.findOne.mockResolvedValue(result);
 
     const response = await request(app.getHttpServer())
-      .get('/api/v1/manager/departments/3')
+      .get('/api/v1/manager-data/departments/3')
       .set('Authorization', 'Bearer manager-test-token')
       .expect(200);
 
@@ -77,20 +77,20 @@ describe('ManagerDepartmentController (e2e)', () => {
     expect(departmentService.findOne).toHaveBeenCalledWith(3);
   });
 
-  it('GET /manager/departments/:id - rejects non-numeric id', async () => {
+  it('GET /manager-data/departments/:id - rejects non-numeric id', async () => {
     await request(app.getHttpServer())
-      .get('/api/v1/manager/departments/abc')
+      .get('/api/v1/manager-data/departments/abc')
       .set('Authorization', 'Bearer manager-test-token')
       .expect(400);
   });
 
-  it('PATCH /manager/departments/:id - updates a department', async () => {
+  it('PATCH /manager-data/departments/:id - updates a department', async () => {
     const dto = { description: 'Updated description' };
     const result = { id: 3, name: 'Finance', ...dto };
     departmentService.update.mockResolvedValue(result);
 
     const response = await request(app.getHttpServer())
-      .patch('/api/v1/manager/departments/3')
+      .patch('/api/v1/manager-data/departments/3')
       .set('Authorization', 'Bearer manager-test-token')
       .send(dto)
       .expect(200);
@@ -99,11 +99,11 @@ describe('ManagerDepartmentController (e2e)', () => {
     expect(departmentService.update).toHaveBeenCalledWith(3, dto);
   });
 
-  it('DELETE /manager/departments/:id - removes a department', async () => {
+  it('DELETE /manager-data/departments/:id - removes a department', async () => {
     departmentService.remove.mockResolvedValue({ affected: 1 });
 
     const response = await request(app.getHttpServer())
-      .delete('/api/v1/manager/departments/3')
+      .delete('/api/v1/manager-data/departments/3')
       .set('Authorization', 'Bearer manager-test-token')
       .expect(200);
 

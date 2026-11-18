@@ -31,7 +31,7 @@ import { Role } from '../../../shared/enums/user-role.enum';
 @ApiBearerAuth()
 @UseGuards(RoleGuard)
 @RoleDt(Role.MANAGER)
-@Controller('manager/departments')
+@Controller('manager-data/departments')
 export class ManagerDepartmentController {
     constructor(
         private readonly departmentService: DepartmentManageService,

@@ -10,6 +10,9 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { RedisModule } from './module/redis/redis.module';
 import { PayRolleModule } from './module/payroll/payroll.module';
+import {ServeStaticModule} from "@nestjs/serve-static"
+import path from 'path';
+import { WebModule } from './web/web.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -33,7 +36,18 @@ import { PayRolleModule } from './module/payroll/payroll.module';
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),
     RedisModule,
-    PayRolleModule
+    PayRolleModule,
+    ServeStaticModule.forRoot({
+      rootPath:path.join(__dirname, 'public'),
+      serveRoot:'/public'
+    },{
+      rootPath:path.join(__dirname, 'public', 'js'),
+      serveRoot:"/js"
+    },{
+      rootPath:path.join(__dirname, 'public', 'css'),
+      serveRoot:"/css"
+    }),
+    WebModule
   ],
   providers: [
     {

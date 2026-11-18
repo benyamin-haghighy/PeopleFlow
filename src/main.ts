@@ -2,14 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe } from '@nestjs/common';
+import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import cookieParser from "cookie-parser"
 import { ResponseInterceptor } from './common/interceptors/response.interceptors';
 import path from 'node:path';
 import { FilterError } from './common/filter/error.filter';
 async function bootstrap() {
-  
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService)
   const port = configService.get('PORT', 3001)
@@ -17,14 +17,37 @@ async function bootstrap() {
   app.setBaseViewsDir(path.join(__dirname, 'views'))
   app.setViewEngine('ejs')
   // set defaul perfix
-  app.setGlobalPrefix('api/v1')
+
+  app.setGlobalPrefix('api/v1', {
+    exclude: [
+      { path: '/', method: RequestMethod.GET },
+      { path: 'login', method: RequestMethod.GET },
+      { path: 'register', method: RequestMethod.GET },
+
+      { path: 'manager', method: RequestMethod.GET },
+      { path: 'manager/departments', method: RequestMethod.GET },
+      { path: 'manager/groups', method: RequestMethod.GET },
+      { path: 'manager/payroll', method: RequestMethod.GET },
+      { path: 'manager/create-manager', method: RequestMethod.GET },
+
+      { path: 'employee', method: RequestMethod.GET },
+      { path: 'employee/attendance', method: RequestMethod.GET },
+      { path: 'employee/payroll', method: RequestMethod.GET },
+      { path: 'employee/departments', method: RequestMethod.GET },
+      { path: 'employee/account', method: RequestMethod.GET },
+
+      { path: '403', method: RequestMethod.GET },
+      { path: '404', method: RequestMethod.GET },
+    ],
+  });
+
   // user global pipe
 
   app.useGlobalPipes(new ValidationPipe())
   // set cors
   app.enableCors({
     origin: ['localhost:3000'],
-    methods: ["POST",'GET', 'DELETE', 'PUT', 'PATCH'],
+    methods: ["POST", 'GET', 'DELETE', 'PUT', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
 

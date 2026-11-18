@@ -27,7 +27,6 @@ export class AttendanceController {
   constructor(
     private readonly attendanceService: AttendanceService,
   ) {}
-
   @Post('checkin')
   @ApiOperation({ summary: 'ثبت ساعت ورود کارمند' })
   @ApiBody({ type: attendanceDto })

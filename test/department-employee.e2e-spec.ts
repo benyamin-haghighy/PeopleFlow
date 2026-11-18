@@ -17,12 +17,12 @@ describe('EmployeeDepartmentController (e2e)', () => {
   afterAll(async () => app.close());
   beforeEach(() => jest.clearAllMocks());
 
-  it('GET /employee/departments - returns departments to employee', async () => {
+  it('GET /employee-data/departments - returns departments to employee', async () => {
     const result = [{ id: 1, name: 'Human Resources' }];
     departmentService.findAll.mockResolvedValue(result);
 
     const response = await request(app.getHttpServer())
-      .get('/api/v1/employee/departments')
+      .get('/api/v1/employee-data/departments')
       .set('Authorization', 'Bearer employee-test-token')
       .expect(200);
 
@@ -30,23 +30,23 @@ describe('EmployeeDepartmentController (e2e)', () => {
     expect(departmentService.findAll).toHaveBeenCalledTimes(1);
   });
 
-  it('GET /employee/departments - rejects unauthenticated request', async () => {
-    await request(app.getHttpServer()).get('/api/v1/employee/departments').expect(401);
+  it('GET /employee-data/departments - rejects unauthenticated request', async () => {
+    await request(app.getHttpServer()).get('/api/v1/employee-data/departments').expect(401);
   });
 
-  it('GET /employee/departments - rejects manager because route is employee-only', async () => {
+  it('GET /employee-data/departments - rejects manager because route is employee-only', async () => {
     await request(app.getHttpServer())
-      .get('/api/v1/employee/departments')
+      .get('/api/v1/employee-data/departments')
       .set('Authorization', 'Bearer manager-test-token')
       .expect(403);
   });
 
-  it('GET /employee/departments/:id - returns one department', async () => {
+  it('GET /employee-data/departments/:id - returns one department', async () => {
     const result = { id: 5, name: 'Finance' };
     departmentService.findOne.mockResolvedValue(result);
 
     const response = await request(app.getHttpServer())
-      .get('/api/v1/employee/departments/5')
+      .get('/api/v1/employee-data/departments/5')
       .set('Authorization', 'Bearer employee-test-token')
       .expect(200);
 
@@ -54,9 +54,9 @@ describe('EmployeeDepartmentController (e2e)', () => {
     expect(departmentService.findOne).toHaveBeenCalledWith(5);
   });
 
-  it('GET /employee/departments/:id - rejects invalid id', async () => {
+  it('GET /employee-data/departments/:id - rejects invalid id', async () => {
     await request(app.getHttpServer())
-      .get('/api/v1/employee/departments/nope')
+      .get('/api/v1/employee-data/departments/nope')
       .set('Authorization', 'Bearer employee-test-token')
       .expect(400);
   });

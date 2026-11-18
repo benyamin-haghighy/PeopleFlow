@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#102b4e"><title><%= title %> | HR</title><link rel="stylesheet" href="/css/app.css"></head>
+<body class="auth-page"><main class="auth-shell auth-shell-compact"><section class="auth-card">
+<a class="brand brand-centered" href="/login"><span class="brand-mark">HR</span><span><b>سامانه منابع انسانی</b><small>ایجاد حساب کارمند</small></span></a>
+<div class="auth-heading"><span class="eyebrow">عضویت در سازمان</span><h1>ثبت‌نام کارمند</h1><p>اطلاعات خود را مطابق اطلاعات ثبت‌شده توسط مدیر وارد کنید.</p></div>
+<div id="auth-message" class="notice hidden" role="alert"></div>
+<form id="register-form" class="form-stack">
+<label>نام و نام خانوادگی<input name="name" type="text" autocomplete="name" placeholder="نام کامل" required minlength="1"></label>
+<label>شماره موبایل<input name="phone" type="tel" inputmode="tel" placeholder="09123456789" required maxlength="11"></label>
+<label>رمز عبور<input name="password" type="password" autocomplete="new-password" placeholder="حداقل ۸ و حداکثر ۱۶ کاراکتر" required minlength="8" maxlength="16"></label>
+<label>شناسه گروه شغلی<input name="groupId" type="number" min="1" step="1" placeholder="شناسه‌ای که مدیر در اختیارتان گذاشته" required></label>
+<p class="field-help">در حال حاضر API عمومی برای دریافت فهرست گروه‌ها وجود ندارد؛ شناسه گروه را از مدیر سازمان دریافت کنید.</p>
+<button class="btn btn-primary btn-block" type="submit">ایجاد حساب کاربری <span class="btn-arrow">←</span></button>
+</form><p class="auth-foot">قبلاً ثبت‌نام کرده‌اید؟ <a href="/login">ورود به سامانه</a></p>
+</section><aside class="auth-aside"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="aside-content"><span class="aside-kicker">WELCOME TO HR</span><h2>شروع یک تجربه<br>سازمانی منظم</h2><p>با حساب کاربری خود به امکانات مرتبط با نقش سازمانی‌تان دسترسی خواهید داشت.</p></div><div class="aside-bottom">HR Workspace</div></aside></main><script src="/js/api.js"></script><script src="/js/auth.js"></script></body></html>

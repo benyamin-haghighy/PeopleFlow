@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b4e">
+  <title>
+    <%= title %> | HR
+  </title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+
+<body class="app-page" data-page="<%= page %>" data-role="<%= role %>">
+
+  <div class="app-frame">
+
+    <aside class="sidebar" id="sidebar">
+
+      <a class="brand sidebar-brand" href="/<%= role === 'MANAGER' ? 'manager' : 'employee' %>">
+        <span class="brand-mark">HR</span>
+        <span>
+          <b>سامانه منابع انسانی</b>
+          <small>پنل <%= role==='MANAGER' ? 'مدیریت' : 'کارمند' %></small>
+        </span>
+      </a>
+
+      <div class="side-label">منوی اصلی</div>
+
+      <nav class="side-nav" id="side-nav">
+
+        <% if (role==='MANAGER' ) { %>
+
+          <a href="/manager" data-nav="manager-dashboard">
+            <span class="nav-icon">⌂</span>
+            داشبورد
+          </a>
+
+          <a href="/manager/departments" data-nav="manager-departments">
+            <span class="nav-icon">▦</span>
+            دپارتمان‌ها
+          </a>
+
+          <a href="/manager/groups" data-nav="manager-groups">
+            <span class="nav-icon">◫</span>
+            گروه‌ها و پایه حقوق
+          </a>
+
+          <a href="/manager/payroll" data-nav="manager-payroll">
+            <span class="nav-icon">▤</span>
+            فیش‌های حقوقی
+          </a>
+
+          <a href="/manager/create-manager" data-nav="manager-create-manager">
+            <span class="nav-icon">＋</span>
+            ساخت حساب مدیر
+          </a>
+
+          <% } else { %>
+
+            <a href="/employee" data-nav="employee-dashboard">
+              <span class="nav-icon">⌂</span>
+              داشبورد
+            </a>
+
+            <a href="/employee/attendance" data-nav="employee-attendance">
+              <span class="nav-icon">◷</span>
+              حضور و غیاب
+            </a>
+
+            <a href="/employee/payroll" data-nav="employee-payroll">
+              <span class="nav-icon">▤</span>
+              فیش‌های حقوقی من
+            </a>
+
+            <a href="/employee/departments" data-nav="employee-departments">
+              <span class="nav-icon">▦</span>
+              دپارتمان‌ها
+            </a>
+
+            <a href="/employee/account" data-nav="employee-account">
+              <span class="nav-icon">◉</span>
+              حساب کاربری
+            </a>
+
+            <% } %>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+
+        <div class="secure-note">
+          <span>✓</span>
+          <div>
+            <b>اتصال امن</b>
+            <small>دسترسی کنترل‌شده</small>
+          </div>
+        </div>
+
+        <button class="side-logout" id="logout-button">
+          <span>↪</span>
+          خروج از حساب
+        </button>
+
+      </div>
+
+    </aside>
+
+    <div class="main-column">
+
+      <header class="topbar">
+
+        <button class="mobile-menu" id="mobile-menu" aria-label="باز کردن منو">
+          ☰
+        </button>
+
+        <div class="topbar-title">
+          <span class="topbar-kicker">HR WORKSPACE</span>
+          <strong>
+            <%= title %>
+          </strong>
+        </div>
+
+        <div class="topbar-user">
+          <span class="avatar" id="user-avatar">HR</span>
+
+          <span class="user-meta">
+            <b id="user-name">کاربر</b>
+            <small id="user-role">
+              <%= role==='MANAGER' ? 'مدیر سامانه' : 'کارمند' %>
+            </small>
+          </span>
+        </div>
+
+      </header>
+
+      <main class="page-content">
+
+        <div id="toast-region" class="toast-region" aria-live="polite"></div>
+
+        <div id="page-root" class="page-root">
+          <div class="loading-state">
+            <span class="spinner"></span>
+            در حال آماده‌سازی محیط کاربری…
+          </div>
+        </div>
+
+      </main>
+
+      <footer class="app-footer">
+        <span>سامانه مدیریت منابع انسانی</span>
+        <span>HR Workspace</span>
+      </footer>
+
+    </div>
+
+  </div>
+
+  <div id="modal-root"></div>
+
+  <script src="/js/api.js?v=20261118-2"></script>
+  <script src="/js/app.js?v=20261118-2"></script>
+
+</body>
+
+</html>
